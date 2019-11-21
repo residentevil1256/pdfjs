@@ -218,6 +218,25 @@ class PDFLinkService {
       if ('page' in params) {
         pageNumber = (params.page | 0) || 1;
       }
+      if ('viewrect' in params) {
+        let viewRectArgs = params.viewrect.split(','); // scale,left,top
+        let viewRectArg = viewRectArgs[0];
+        //  let viewRectArgNumber = parseFloat(zoomArg);
+        console.log('viewRects', params);
+        if (viewRectArg === 'FitR') {
+            if (viewRectArgs.length !== 5) {
+               console.error(
+                 'PDFLinkService.setHash: Not enough parameters for "FitR".');
+            } else {
+               dest = [null, { name: viewRectArg, },
+                       (viewRectArgs[1] | 0), (viewRectArgs[2] | 0),
+                       (viewRectArgs[3] | 0), (viewRectArgs[4] | 0)];
+            }
+        } else {
+            console.error(`PDFLinkService.setHash: "${viewRectArg}" is not ` +
+                           'a valid zoom value.');
+        }
+      }
       if ('zoom' in params) {
         // Build the destination array.
         let zoomArgs = params.zoom.split(','); // scale,left,top
