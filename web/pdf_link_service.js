@@ -220,6 +220,7 @@ class PDFLinkService {
       }
       if ('viewrect' in params) {
         let viewRectArgs = params.viewrect.split(','); // scale,left,top
+        viewRectArgs.unshift('FitR');
         let viewRectArg = viewRectArgs[0];
         //  let viewRectArgNumber = parseFloat(zoomArg);
         console.log('viewRects', params);
