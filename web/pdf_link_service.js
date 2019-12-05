@@ -219,8 +219,7 @@ class PDFLinkService {
         pageNumber = (params.page | 0) || 1;
       }
       if ('viewrect' in params) {
-        let viewRectArgs = params.viewrect.split(','); // scale,left,top
-        viewRectArgs.unshift('FitR');
+        let viewRectArgs = params.viewrect.split(',');
         let viewRectArg = viewRectArgs[0];
         //  let viewRectArgNumber = parseFloat(zoomArg);
         console.log('viewRects', params);
@@ -235,7 +234,30 @@ class PDFLinkService {
             }
         } else {
             console.error(`PDFLinkService.setHash: "${viewRectArg}" is not ` +
-                           'a valid zoom value.');
+                           'a valid viewrect value.');
+        }
+      }
+      if ('view' in params) {
+        console.log('view here');
+        // Build the destination array.
+        let viewArgs = params.view.split(',');
+        let viewArg = viewArgs[0];
+        // let viewArgNumber = parseFloat(viewArg);
+
+        if (!viewArg.includes('Fit')) {
+          console.error(
+            'PDFLinkService.setHash: Not enough parameters for "view".');
+        } else {
+          if (viewArg === 'Fit' || viewArg === 'FitB') {
+            dest = [null, { name: viewArg, }];
+          } else if ((viewArg === 'FitH' || viewArg === 'FitBH') ||
+                     (viewArg === 'FitV' || viewArg === 'FitBV')) {
+            dest = [null, { name: viewArg, },
+                    viewArgs.length > 1 ? (viewArgs[1] | 0) : null];
+          } else {
+            console.error(`PDFLinkService.setHash: "${viewArg}" is not ` +
+                          'a valid view value.');
+          }
         }
       }
       if ('zoom' in params) {
